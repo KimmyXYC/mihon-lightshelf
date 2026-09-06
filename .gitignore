@@ -1,0 +1,13 @@
+.gradle/
+.kotlin/
+**/build/
+local.properties
+.idea/
+*.iml
+*.jks
+*.keystore
+.env
+.env.*
+!.env.example
+.playwright-mcp/
+.reference/
