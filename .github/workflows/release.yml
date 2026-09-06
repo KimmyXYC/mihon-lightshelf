@@ -1,0 +1,78 @@
+name: Release LightShelf
+
+on:
+  push:
+    tags:
+      - 'v[0-9]*.[0-9]*.[0-9]*'
+
+permissions:
+  contents: read
+
+concurrency:
+  group: lightshelf-release
+  cancel-in-progress: false
+  queue: max
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    outputs:
+      valid: ${{ steps.tag.outputs.valid }}
+    steps:
+      - name: Check exact release tag format
+        id: tag
+        env:
+          TAG: ${{ github.ref_name }}
+        shell: bash
+        run: |
+          if [[ "$TAG" =~ ^v[0-9]+\.[0-9]+\.[0-9]+$ ]]; then
+            echo 'valid=true' >> "$GITHUB_OUTPUT"
+          else
+            echo 'Skipping a tag that is not v<major>.<minor>.<patch>'
+          fi
+
+  release:
+    needs: validate
+    if: needs.validate.outputs.valid == 'true'
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    permissions:
+      contents: write
+    env:
+      TAG: ${{ github.ref_name }}
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: '21'
+      - uses: android-actions/setup-android@v3
+      - name: Install Android SDK packages
+        run: sdkmanager 'platforms;android-36' 'build-tools;35.0.0'
+      - uses: gradle/actions/setup-gradle@v4
+      - name: Test release tooling
+        run: python3 -m unittest discover -s .github/scripts -p 'test_*.py' -v
+      - name: Build and verify
+        run: ./gradlew :extension:assembleRelease :extension:testDebugUnitTest :extension:lintDebug --console=plain
+      - name: Sign and verify APK
+        env:
+          SIGNING_KEYSTORE_BASE64: ${{ secrets.SIGNING_KEYSTORE_BASE64 }}
+          SIGNING_STORE_PASSWORD: ${{ secrets.SIGNING_STORE_PASSWORD }}
+          SIGNING_KEY_ALIAS: ${{ secrets.SIGNING_KEY_ALIAS }}
+          SIGNING_KEY_PASSWORD: ${{ secrets.SIGNING_KEY_PASSWORD }}
+          TMPDIR: ${{ runner.temp }}
+        run: |
+          python3 .github/scripts/release.py prepare \
+            --apk extension/build/outputs/apk/release/extension-release-unsigned.apk \
+            --tag "$TAG" --output "$RUNNER_TEMP/release"
+      - name: Publish Release and Mihon repository
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          python3 .github/scripts/release.py publish \
+            --tag "$TAG" --output "$RUNNER_TEMP/release" --repository "$GITHUB_REPOSITORY"
+      - name: Clean signing material
+        if: always()
+        run: rm -rf -- "$RUNNER_TEMP"/lightshelf-signing-*

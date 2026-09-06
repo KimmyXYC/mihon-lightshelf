@@ -11,3 +11,4 @@ local.properties
 !.env.example
 .playwright-mcp/
 .reference/
+__pycache__/

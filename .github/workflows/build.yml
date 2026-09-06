@@ -2,6 +2,8 @@ name: Build LightShelf
 
 on:
   push:
+    branches-ignore:
+      - repo
   pull_request:
   workflow_dispatch:
 
@@ -21,6 +23,8 @@ jobs:
       - name: Install Android SDK packages
         run: sdkmanager 'platforms;android-36' 'build-tools;35.0.0'
       - uses: gradle/actions/setup-gradle@v4
+      - name: Test release tooling
+        run: python3 -m unittest discover -s .github/scripts -p 'test_*.py' -v
       - name: Build and verify
         run: ./gradlew :extension:assembleDebug :extension:assembleRelease :extension:testDebugUnitTest :extension:lintDebug --console=plain
       - uses: actions/upload-artifact@v4
