@@ -1,0 +1,19 @@
+[
+  {
+    "name": "Tachiyomi: 轻书架 / LightShelf",
+    "pkg": "eu.kanade.tachiyomi.extension.zh.lightshelf",
+    "apk": "lightshelf-v1.4.3.apk",
+    "lang": "zh",
+    "code": 3,
+    "version": "1.4.3",
+    "nsfw": 1,
+    "sources": [
+      {
+        "name": "轻书架 / LightShelf",
+        "lang": "zh",
+        "baseUrl": "https://www.lightnovel.app",
+        "id": 6008518844165643536
+      }
+    ]
+  }
+]

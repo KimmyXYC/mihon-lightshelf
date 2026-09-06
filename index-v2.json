@@ -1,0 +1,36 @@
+{
+  "name": "LightShelf",
+  "badgeLabel": "LS",
+  "signingKey": "99b3bc17f3006735c250b935b091d4a6e42787313ea6c214c717db7e429a4910",
+  "contact": {
+    "website": "https://github.com/KimmyXYC/mihon-lightshelf",
+    "discord": null
+  },
+  "extensionListUrl": null,
+  "extensionList": {
+    "extensions": [
+      {
+        "name": "轻书架 / LightShelf",
+        "packageName": "eu.kanade.tachiyomi.extension.zh.lightshelf",
+        "resources": {
+          "apkUrl": "https://raw.githubusercontent.com/KimmyXYC/mihon-lightshelf/repo/apk/lightshelf-v1.4.3.apk",
+          "iconUrl": "https://raw.githubusercontent.com/KimmyXYC/mihon-lightshelf/repo/icon/eu.kanade.tachiyomi.extension.zh.lightshelf.png"
+        },
+        "extensionLib": "1.4",
+        "versionCode": 3,
+        "versionName": "1.4.3",
+        "contentWarning": "NSFW",
+        "sources": [
+          {
+            "id": 6008518844165643536,
+            "name": "轻书架 / LightShelf",
+            "language": "zh",
+            "homeUrl": "https://www.lightnovel.app",
+            "mirrorUrls": [],
+            "message": null
+          }
+        ]
+      }
+    ]
+  }
+}

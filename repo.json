@@ -1,0 +1,8 @@
+{
+  "meta": {
+    "name": "LightShelf",
+    "website": "https://github.com/KimmyXYC/mihon-lightshelf",
+    "signingKeyFingerprint": "99b3bc17f3006735c250b935b091d4a6e42787313ea6c214c717db7e429a4910"
+  },
+  "index_v2": "https://raw.githubusercontent.com/KimmyXYC/mihon-lightshelf/repo/index-v2.json"
+}
